@@ -23,8 +23,8 @@ For OS X users:
 `sudo chmod +x /opt/local/bin/coffy`  
 
 For Linux users:  
-`sudo wget https://raw.github.com/rbika/coffy/master/coffy.py -o /opt/local/bin/coffy`  
-`sudo chmod +x /opt/local/bin/coffy`  
+`sudo wget https://raw.github.com/rbika/coffy/master/coffy.py -O /usr/local/bin/coffy`  
+`sudo chmod +x /usr/local/bin/coffy`  
 
 Example
 -------
