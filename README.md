@@ -15,15 +15,14 @@ Options
     --no-statistics     does not compute statistics
     --reset-statistics  erase statistics
 
-
 Installation
 ------------
 For OS X users:  
-`sudo curl https://raw.github.com/rbika/coffy/master/coffy.py -o /opt/local/bin/coffy`  
+`sudo curl -o /opt/local/bin/coffy https://raw.github.com/rbika/coffy/master/coffy.py`  
 `sudo chmod +x /opt/local/bin/coffy`  
 
 For Linux users:  
-`sudo wget https://raw.github.com/rbika/coffy/master/coffy.py -O /usr/local/bin/coffy`  
+`sudo wget -O /usr/local/bin/coffy https://raw.github.com/rbika/coffy/master/coffy.py`  
 `sudo chmod +x /usr/local/bin/coffy`  
 
 Example
@@ -41,4 +40,3 @@ You'll get for example:
           \|     |
           : \___' :
            `-----´
-

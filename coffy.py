@@ -5,14 +5,13 @@
 # Email:    rbmbika@gmail.com
 # Twitter:  rbika
 
-# Python.
 import os
 import sys
 import time
 import random
 import pickle
 
-# Globals.
+# Globals. {{{
 _VERSION = 'Version: 1.1.0'
 
 _ERROR1 = '''Usage: coffy [option] name name [name ...]
@@ -48,6 +47,7 @@ _RESULT = '''
 '''
 
 _STATISTICS_PATH = os.path.expanduser('~') + '/.coffy.pkl'
+# }}}
 
 
 def display_result(cguy):
@@ -158,3 +158,5 @@ if __name__ == '__main__':
 
         else:
             print 'No statistics was computed this time.'
+
+# vim:foldmethod=marker
