@@ -5,15 +5,19 @@ Just give it a list of names and it will choose one.
 
 Usage
 -----
-**coffy** [option] name name [name ...]
+**coffy** [options] action
+
+Supported actions
+-----------------
+	name name [name ...]    list of names to be chosen
+	help                    display this help message
+	version                 display version
+	stats                   display usage statistics
+	reset                   reset statistics
 
 Options
 -------
-    -h, --help          display this help message
-    -v, --version       display version
-    -s, --statistics    display usage statistics
-    --no-statistics     does not compute statistics
-    --reset-statistics  erase statistics
+    -x, --no-stats     does not compute statistics
 
 Installation
 ------------

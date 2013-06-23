@@ -10,9 +10,10 @@ import sys
 import time
 import random
 import pickle
+import datetime
 
 # Globals. {{{
-_VERSION = 'Version: 1.1.0'
+_VERSION = 'Version: 1.1.1'
 
 _ERROR1 = '''Usage: coffy [option] name name [name ...]
 
@@ -20,19 +21,19 @@ Error: Enter at least 2 names.'''
 
 _ERROR2 = 'No statistics stored yet.'
 
-_HELP = '''Usage: coffy [option] name name [name ...]
+_HELP = '''Usage: coffy [options] action
 
 A simple tool to decide who is going to make the coffee.
 
-Positional arguments:
-name            a guy to be chosen
+Supported actions:
+name name [name ...]    list of names to be chosen
+help                    display this help message
+version                 display version
+stats                   display usage statistics
+reset                   reset statistics
 
-Optional arguments:
--h, --help          display this help message
--v, --version       display version
--s, --statistics    display usage statistics
---no-statistics     does not compute statistics
---reset-statistics  erase statistics'''
+Options:
+-x, --no-stats          does not compute statistics'''
 
 
 _RESULT = '''
@@ -41,7 +42,8 @@ _RESULT = '''
              ))))
           _ .---.
          | |`---'|        %s
-          \|     |
+          \|     |        %s
+           |     |
           : .___, :
            `-----´
 '''
@@ -56,7 +58,9 @@ def display_result(cguy):
         print '.'
         time.sleep(0.8)
 
-    print _RESULT % cguy.capitalize()
+    now = datetime.datetime.now()
+
+    print _RESULT % (cguy.capitalize(), now.strftime('%a, %I:%M %p'))
 
 
 def compute_statistics(cguy):
@@ -111,13 +115,13 @@ def display_statistics(data):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1 and sys.argv[1] in ['-h', '--help']:
+    if len(sys.argv) > 1 and sys.argv[1] == 'help':
         print _HELP
 
-    elif len(sys.argv) > 1 and sys.argv[1] in ['-v', '--version']:
+    elif len(sys.argv) > 1 and sys.argv[1] == 'version':
         print _VERSION
 
-    elif len(sys.argv) > 1 and sys.argv[1] in ['-s', '--statistics']:
+    elif len(sys.argv) > 1 and sys.argv[1] == 'stats':
         try:
             pkl = open(_STATISTICS_PATH, 'r')
 
@@ -129,7 +133,7 @@ if __name__ == '__main__':
 
             pkl.close()
 
-    elif len(sys.argv) > 1 and sys.argv[1] == '--erase-statistics':
+    elif len(sys.argv) > 1 and sys.argv[1] == 'reset':
         try:
             os.remove(_STATISTICS_PATH)
 
@@ -144,12 +148,10 @@ if __name__ == '__main__':
     else:
         comp_statistics = True
 
-        if '--no-statistics' in sys.argv:
+        if sys.argv[1] in ['-x', '--no-stats']:
             comp_statistics = False
 
-            sys.argv.remove('--no-statistics')
-
-        cguy = random.choice(sys.argv[1:])
+        cguy = random.choice(sys.argv[2:])
 
         display_result(cguy)
 
