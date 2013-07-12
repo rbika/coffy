@@ -13,6 +13,7 @@ Supported actions
 	help                    display this help message
 	version                 display version
 	stats                   display usage statistics
+    remove name [name ...]  remove stats for the listed names  
 	reset                   reset statistics
 
 Options
@@ -40,7 +41,7 @@ You'll get for example:
             ((((
              ))))
           _ .---.
-         ( |`---'|        Wlad
-          \|     |
-          : \___' :
+         | |`---'|        Wlad
+          \|     |        Wed, 10:38 PM
+          : .___, :
            `-----´

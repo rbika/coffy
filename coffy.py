@@ -13,13 +13,17 @@ import pickle
 import datetime
 
 # Globals. {{{
-_VERSION = 'Version: 1.1.1'
+_VERSION = 'Version: 1.2.0'
 
-_ERROR1 = '''Usage: coffy [option] name name [name ...]
+_ERROR1 = 'Enter at least one name.'
+
+_ERROR2 = 'No statistics stored for "%s".'
+
+_ERROR3 = 'No statistics stored yet.'
+
+_ERROR4 = '''Usage: coffy [option] name name [name ...]
 
 Error: Enter at least 2 names.'''
-
-_ERROR2 = 'No statistics stored yet.'
 
 _HELP = '''Usage: coffy [options] action
 
@@ -29,11 +33,12 @@ Supported actions:
 name name [name ...]    list of names to be chosen
 help                    display this help message
 version                 display version
+remove name [name ...]  remove stats for the listed names
 stats                   display usage statistics
 reset                   reset statistics
 
 Options:
--x, --no-stats          does not compute statistics'''
+-x, --no-stats          dry run'''
 
 
 _RESULT = '''
@@ -43,13 +48,19 @@ _RESULT = '''
           _ .---.
          | |`---'|        %s
           \|     |        %s
-           |     |
           : .___, :
            `-----´
 '''
 
 _STATISTICS_PATH = os.path.expanduser('~') + '/.coffy.pkl'
 # }}}
+
+def dump_pickle(data):
+    pkl = open(_STATISTICS_PATH, 'w')
+
+    pickle.dump(data, pkl)
+
+    pkl.close()
 
 
 def display_result(cguy):
@@ -64,7 +75,7 @@ def display_result(cguy):
 
 
 def compute_statistics(cguy):
-    def _update(name):
+    def update(name):
         if name not in data:
             data[name] = {'participated': 0, 'chosen': 0, 'ratio': 0.0}
 
@@ -89,13 +100,9 @@ def compute_statistics(cguy):
 
         pkl.close()
 
-    pkl = open(_STATISTICS_PATH, 'w')
+    map(update, sys.argv[1:])
 
-    map(_update, sys.argv[1:])
-
-    pickle.dump(data, pkl)
-
-    pkl.close()
+    dump_pickle(data)
 
 
 def display_statistics(data):
@@ -114,6 +121,22 @@ def display_statistics(data):
         print line.format(key, val1, val2, val3, **width)
 
 
+def remove_names(data, names):
+    if len(sys.argv) < 3:
+        print _ERROR1
+
+        return
+
+    for name in names:
+        try:
+            del data[name]
+
+        except KeyError:
+            print _ERROR2 % name
+
+    dump_pickle(data)
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'help':
         print _HELP
@@ -126,12 +149,26 @@ if __name__ == '__main__':
             pkl = open(_STATISTICS_PATH, 'r')
 
         except IOError:
-            print _ERROR2
+            print _ERROR3
 
         else:
-            display_statistics(pickle.load(pkl))
+            data = pickle.load(pkl)
 
             pkl.close()
+            display_statistics(data)
+
+    elif len(sys.argv) > 1 and sys.argv[1] == 'remove':
+        try:
+            pkl = open(_STATISTICS_PATH, 'r')
+
+        except IOError:
+            print _ERROR3
+
+        else:
+            data = pickle.load(pkl)
+
+            pkl.close()
+            remove_names(data, sys.argv[2:])
 
     elif len(sys.argv) > 1 and sys.argv[1] == 'reset':
         try:
@@ -140,10 +177,10 @@ if __name__ == '__main__':
             print 'statistics erased!'
 
         except OSError:
-            print _ERROR2
+            print _ERROR3
 
     elif len(sys.argv) <= 2:
-        print _ERROR1
+        print _ERROR4
 
     else:
         comp_statistics = True
@@ -151,7 +188,7 @@ if __name__ == '__main__':
         if sys.argv[1] in ['-x', '--no-stats']:
             comp_statistics = False
 
-        cguy = random.choice(sys.argv[2:])
+        cguy = random.choice(sys.argv[1:])
 
         display_result(cguy)
 
