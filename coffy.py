@@ -16,7 +16,7 @@ def home():
     form_names = request.query.getlist('names')
     context = {'result': ''}
 
-    if form_names:
+    if len(form_names) > 1:
         now = datetime.now()
         chosen = choice(form_names)
         doc1 = {'names': form_names, 'created': now, 'chosen': chosen}
@@ -46,4 +46,4 @@ def add_name():
         redirect('/')
 
 
-run(host='localhost', port=8080, debug=True)
+run(host='localhost', port=8080, debug=True, reloader=True)

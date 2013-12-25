@@ -1,6 +1,4 @@
-1. You shouldn't be able to run the app with only one name selectd.
-
-2. Implement user hierarchy. This should be used to increase or decrease the
+1. Implement user hierarchy. This should be used to increase or decrease the
    chances of a user be chosen.
 
-3. Build the interface.
+2. Build the interface.
