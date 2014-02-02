@@ -1,4 +1,0 @@
-1. Implement user hierarchy. This should be used to increase or decrease the
-   chances of a user be chosen.
-
-2. Build the interface.
