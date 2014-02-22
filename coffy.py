@@ -26,17 +26,15 @@ _RESULT = u'''
    : .___, :
     `-----´
 '''
-
-
 # }}}
 
 
 class User(object):
-    def __init__(self, name, chosen, participated, ratio):
+    def __init__(self, name, chosen, participated):
         self.name = name
         self.chosen = chosen
         self.participated = participated
-        self.ratio = ratio
+        self.ratio = float(chosen) / float(participated) if participated else 0
 
     def print_stats(self):
         data = (self.name, self.chosen, self.participated, self.ratio)
@@ -46,22 +44,25 @@ class User(object):
 
 class Coffy(object):
     def __init__(self, names):
-        self.participants = []
         self.date = datetime.datetime.now()
-        self.chosen = ''
+        self.participants = []
+        self.chosen_user = ''
 
-        cur.execute('''CREATE TABLE IF NOT EXISTS Users (id TEXT PRIMARY KEY,
-            chosen INT, participated INT, ratio FLOAT)''')
+        cur.execute('''CREATE TABLE IF NOT EXISTS User (id TEXT PRIMARY KEY,
+            chosen INT, participated INT)''')
 
         cur.execute('''CREATE TABLE IF NOT EXISTS Log (id INT PRIMARY KEY,
-            chosen TEXT, participants TEXT, date DATETIME)''')
+            chosen_user TEXT, date DATETIME)''')
+
+        cur.execute('''CREATE TABLE IF NOT EXISTS UserLog (id INT PRIMARY KEY,
+            UserId TEXT, LogId INT)''')
 
         for name in names:
-            query = u'SELECT * FROM Users WHERE Id=?'
+            query = u'SELECT * FROM User WHERE Id=?'
             data = cur.execute(query, (name,)).fetchone()
 
             if not data:
-                data = (name, 0, 0, 0)
+                data = (name, 0, 0)
 
             self.participants.append(User(*data))
 
@@ -98,20 +99,25 @@ class Coffy(object):
         print(_RESULT % (self.chosen, self.date.strftime('%a, %I:%M %p')))
 
     def save(self):
-        val1 = cur.execute('SELECT COUNT (id) FROM Log').fetchone()[0] + 1
-        val2 = ','.join([x.name for x in self.participants])
+        cnt1 = cur.execute('SELECT COUNT (id) FROM UserLog').fetchone()[0] + 1
+        cnt2 = cur.execute('SELECT COUNT (id) FROM Log').fetchone()[0] + 1
 
         for user in self.participants:
-            data = (user.chosen, user.participated, user.ratio, user.name)
+            data = (user.chosen, user.participated, user.name)
 
-            cur.execute('INSERT OR IGNORE INTO Users VALUES (?, 0, 0, 0.0)',
+            cur.execute('INSERT OR IGNORE INTO User VALUES (?, 0, 0)',
                 (user.name,))
 
-            cur.execute('''UPDATE Users SET chosen=?, participated=?, ratio=?
+            cur.execute('''UPDATE User SET chosen=?, participated=?
                 WHERE id=?''', data)
 
-        cur.execute('INSERT INTO Log VALUES (?, ?, ?, ?)',
-            (val1, self.chosen, val2, self.date))
+            cur.execute('INSERT INTO UserLog VALUES (?, ?, ?)',
+                (cnt1, user.name, cnt2))
+
+            cnt1 += 1
+
+        cur.execute('INSERT INTO Log VALUES (?, ?, ?)',
+            (cnt2, self.chosen, self.date))
 
         con.commit()
 
