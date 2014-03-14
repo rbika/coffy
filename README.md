@@ -1,7 +1,8 @@
 Coffy 2.0
-====================
-Coffy is an nice office tool that makes a lot easier the decision of who is
-going to make the coffee. Just give it a list of names and it will choose one.
+=========
+Coffy is an nice and fair office tool that makes a lot easier the decision of
+who is going to make the coffee. Just give it a list of names and it will
+choose one.
 
 Usage
 -----
@@ -12,11 +13,11 @@ How it works
 
 Installation
 ------------
-For OS X users:  
-`sudo curl -o /opt/local/bin/coffy https://raw.github.com/rbika/coffy/master/coffy.py`
-`sudo chmod +x /opt/local/bin/coffy`
+For OS X users:
+`sudo curl -o /usr/local/bin/coffy https://raw.github.com/rbika/coffy/master/coffy.py`
+`sudo chmod +x /usr/local/bin/coffy`
 
-For Linux users:  
+For Linux users:
 `sudo wget -O /usr/local/bin/coffy https://raw.github.com/rbika/coffy/master/coffy.py`
 `sudo chmod +x /usr/local/bin/coffy`
 

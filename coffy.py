@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Name: Coffy
-# Version: 2.0
+# Version: 2.0.1
 # Author: Rafael Bika
 
 import os
@@ -91,10 +91,6 @@ class Coffy(object):
             user.participated += 1
             user.ratio = float(user.chosen) / float(user.participated)
 
-    def print_stats(self):
-        for user in self.participants:
-            user.print_stats()
-
     def print_result(self):
         print(_RESULT % (self.chosen, self.date.strftime('%a, %I:%M %p')))
 
@@ -131,12 +127,14 @@ if __name__ == '__main__':
         if sys.argv[1:]:
             coffy = Coffy(sys.argv[1:])
 
-            coffy.print_stats()
             coffy.choose()
             coffy.print_result()
             coffy.save()
 
+            for user in cur.execute('SELECT * FROM User').fetchall():
+                User(*user).print_stats()
+
         else:
-            print _ERROR1
+            print(_ERROR1)
 
 # vim:foldmethod=marker
