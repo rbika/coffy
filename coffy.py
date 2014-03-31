@@ -14,7 +14,7 @@ import datetime
 # Globals. {{{
 _DATABASE_PATH = os.path.expanduser('~') + '/.coffy.db'
 
-_ERROR1 = 'Enter at least one name.'
+_ERROR1 = 'Enter at least two name.'
 
 _RESULT = u'''
       ((((
@@ -124,7 +124,7 @@ if __name__ == '__main__':
     with con:
         cur = con.cursor()
 
-        if sys.argv[1:]:
+        if len(sys.argv) > 2:
             coffy = Coffy(sys.argv[1:])
 
             coffy.choose()
