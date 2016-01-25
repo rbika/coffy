@@ -3,7 +3,7 @@
 
 # Name: Coffy
 # Version: 2.0.1
-# Author: Rafael Bika
+# Author: rbika
 
 import os
 import sys
